@@ -1,0 +1,489 @@
+% Documento hecho a partir de la plantilla de LaTeX: https://github.com/Manuelbelgicano/DGIIM/blob/master/extra/plantilla_apuntes_v2.tex
+
+\documentclass[11pt,twoside,titlepage,a4paper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%			   COLORINES				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xcolor}
+\definecolor{rojooscuro}{HTML}{8A0808}
+\definecolor{burdeos}{HTML}{610B0B}
+\definecolor{rojomorado}{HTML}{B40431}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%			  MATEMÁTICAS				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath} % Matemáticas
+\usepackage{amsfonts} % Letras caligráficas para matemáticas
+\usepackage{mathtools} % Matemáticas extra
+\usepackage{amssymb} % Símbolos extra
+\usepackage{amsthm} % Teoremas
+% Eliminar '*' para añadir numeración a los lemas, teoremas...
+\theoremstyle{definition}
+\newtheorem*{defi}{Definición} % Comando para las definiciones
+\newtheoremstyle{plain_rojo}{}{}{}{}{\color{rojooscuro}\bfseries}{:}{ }{}
+\theoremstyle{plain_rojo}
+\newtheorem*{lem}{Lema} % Comando para los lemas
+\newtheorem*{teo}{Teorema} % Comando para los teoremas
+\theoremstyle{remark}
+\newtheorem*{cor}{Corolario} % Comando para los corolarios
+\renewenvironment{proof}{{\bfseries\color{rojooscuro}Demostración:}}{\qed} % Cambiar el título de las demostraciones
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%			   TIPOGRAFÍA				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{CrimsonPro}
+\usepackage[T1]{fontenc}
+% The font package uses mweights.sty which has som issues with the
+% \normalfont command. The following two lines fixes this issue.
+\let\oldnormalfont\normalfont
+\def\normalfont{\oldnormalfont\mdseries}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				  CÓDIGO				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listingsutf8}
+\lstset{
+	inputencoding=utf8/latin1, % Codificación
+	xleftmargin=1em, % Margen extra a la izquierda
+	breaklines=true, % Romper líneas largas
+	language=C++, % Lenguaje del código
+	frame=single, % Enmarcado
+	numbers=left, % Números de línea
+	numbersep=8pt, % Separación de los números de línea
+	tabsize=4, % Tamaño de los tabs
+	frame=leftline, % Posición del enmarcado
+	framerule=2pt, % Grosor del enmarcado
+	showstringspaces=false, % Mostrar los espacios en las cadenas de caracteres
+	basicstyle=\footnotesize\ttfamily, % Estilo del código
+	keywordstyle=\color{burdeos}, % Estilo de las palabras reservadas
+	numberstyle=\normalfont, % Estilo de los números de línea
+	rulecolor=\color{rojooscuro}, % Estilo del enmarcado
+	commentstyle=\color{red}, % Estilo de los comentarios
+	stringstyle=\color{rojomorado} % Estilo de las cadenas de caracteres
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				MÁRGENES				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[a4paper]{geometry}
+\geometry{
+	left=2.5cm, % Margen izquierdo
+	right=2.5cm, % Margen derecho
+	bottom=2.5cm % Margen inferior
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  			  LISTAS/TABLAS				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{enumitem} % Opciones de personalización de listas
+\renewcommand{\arraystretch}{1.3} %Cambiar el tamaño entre líneas de una tabla
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		COMANDOS PERSONALIZADOS 		%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\autores}{ % Autores del documento
+	\begin{tabular}{l}
+	Manuel Gachs Ballegeer
+	\end{tabular}
+}
+\newcommand{\institucion}{ % Insitución
+	Universidad de Granada
+}
+\newcommand{\infoextra}{ % Año o cualquier otra información para el título
+	curso 2019-2020
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		ENCABEZADO/PIE DE PAGINA		%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+% Para que aparezca el título de la sección y no el número 
+\renewcommand{\sectionmark}[1]{%
+\markboth{#1}{}}
+% Encabezado
+\fancyhead[LE,RO]{\color{burdeos}{\leftmark}} % A la izquierda en pares, derecha en impares
+\fancyhead[RE,LO]{\color{burdeos}{\institucion}} % A la derecha en pares, izquierda en impares
+% Pie de página
+\fancyfoot[LE,RO]{\Large\textbf{\thepage}} % A la izquierda en pares, derecha en impares
+\renewcommand{\headrulewidth}{0.5pt} % Grosor de la línea
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%			   	TÍTULOS					%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{titlesec}
+\titleformat{\section} % Estilo de las secciones
+{\color{rojooscuro}\Huge\bfseries}
+{\color{rojooscuro}\thesection}{1em}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		   	  MISCELÁNEO				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{pagecolor} % Colorear las portadas
+\renewcommand{\contentsname}{Índice} % Cambiar el título del índice
+\setlength\parindent{0pt} % Tamaño de la sangría
+\usepackage{graphicx} % Imágenes
+\usepackage{blindtext} % Texto de relleno (Se puede eliminar)
+\usepackage{multicol} % Para poner las listas por columnas
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				 PORTADA 				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+	\newpagecolor{rojooscuro} % Color de la portada
+	\parbox[t]{\textwidth}{
+		\raggedright
+		\color{white}{\LARGE{\textbf{\institucion}}} \\
+		\textit{\infoextra}
+	}
+	\vfill
+	\parbox[c]{\textwidth}{
+		\color{white}{
+			\fontsize{70pt}{70pt}{\textbf{Probabilidad}} \\
+			\bigskip \\
+			\fontsize{40pt}{40pt}{\emph{Formulario}}
+		}
+	}
+	\vfill
+	\parbox[t]{\textwidth}{
+		\raggedright
+		\color{white}{\Large{\autores}} \\
+	}
+\end{titlepage}
+\restorepagecolor
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				 ÍNDICE 				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				 DOCUMENTO 				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  	   ESPACIOS DE PROBABILIDAD			%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Espacios de probabilidad}
+
+Propiedades de la probabilidad:
+\begin{itemize}[noitemsep]
+	\item $P(\emptyset)=0,\;P(\Omega)=1$
+	\item $P(\bar{A})=1-P(A)\;\;\forall A\in\mathcal{A}$
+	\item $P(\bigcup_{i=1}^{n}A_i)=\sum_{i=1}^{n}P(A_i)$ donde $A_i\cap A_j=\emptyset,\;\forall j\neq i$
+	\item $P(\bigcup_{i=1}^{n}A_i)\leq\sum_{i=1}^{n}P(A_i)$
+	\item Si $A\subseteq B$, entonces $P(A)\leq P(B)$
+	\item $P(A\cup B)=P(A)+P(B)-P(A\cap B)$
+	\item $P(A\cup B\cup C)=P(A)+P(B)+P(C)-P(A\cap B)-P(A\cap C)-P(B\cap C)+P(A\cap B\cap C)$
+	\item $P(A-B)=P(A\cap\bar{B})=P(A)-P(A\cap B)$
+	\item Leyes de De Morgan:
+	\begin{itemize}
+		\item $\overline{A\cup B}=\bar{A}\cap\bar{B}$
+		\item $\overline{A\cap B}=\bar{A}\cup\bar{B}$
+	\end{itemize}
+	\item $P(\bigcap_{i=1}^{n}A_i)\geq 1-\sum_{i=1}^{n}P(\bar{A}_i)$ (Desigualdad de Boole)
+\end{itemize}
+
+\subsubsection*{Probabilidad condicionada}
+
+Cálculo de la probabilidad condicionada:
+$$P(B/A)=\displaystyle\frac{P(A\cap B)}{P(A)}$$
+En caso de que los sucesos $A$ y $B$ sean independientes, $P(A/B)=P(A)$.
+
+Cálculo de la probabilidad condicionada a la intersección de sucesos:
+$$P(C/A\cap B)=\displaystyle\frac{P(A\cap B\cap C)}{P(A)P(B/A)}$$
+Cálculo de la intersección de sucesos a partir de las probabilidades condicionadas:
+$$P(A_1\cap A_2\cap\ldots\cap A_n)=P(A_1)P(A_2/A_1)P(A_3/A_2\cap A_1)\cdots P(A_n/A_{n-1}\cap\ldots\cap A_1)$$
+Si los sucesos son independientes, entonces $P(A_1\cap A_2\cap\ldots\cap A_n)=P(A_1)P(A_2)\cdots P(A_n)$
+
+\subsubsection*{Teorema de la probabilidad total}
+
+$$P(B)=\displaystyle\sum_{i=1}^{n}P(A_1)P(B/A_i)$$
+
+\subsubsection*{Teorema de Bayes}
+
+$$P(A_i/B)=\displaystyle\frac{P(A_i)P(B/A_i)}{\sum_{i=1}^{n}P(A_i)P(B/A_i)}$$
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		 DISTRIBUCIONES DISCRETAS		%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\section{Distribuciones discretas}
+
+\subsection{Distribución degenerada $X\rightsquigarrow D(c)$}
+
+Función masa de probabilidad:
+\begin{equation*}
+P[X=x]=\left\{
+	\begin{array}{l c l}
+	1 & si & x=c \\
+	0 & si & x\neq c
+	\end{array}
+\right.
+\end{equation*}
+Función de distribución:
+\begin{equation*}
+F(x)=\left\{
+	\begin{array}{l c l}
+	0 & si & x<c \\
+	1 & si & x\geq c
+	\end{array}
+\right.
+\end{equation*}
+Función generatriz de momentos: $M_x(t)=E[e^{tx}]=e^{tc}$, $\forall t\in\mathbb{R}$
+
+\subsection{Distribución uniforme discreta $X\rightsquigarrow U\{x_1,\ldots,x_n\}$}
+
+Función masa de probabilidad:
+\begin{equation*}
+P[X=x]=\left\{
+	\begin{array}{l c l}
+	^1/_n & si & x\in\{x_1,\ldots,x_n\} \\
+	0 & si & x\notin\{x_1,\ldots,x_n\}
+	\end{array}
+\right.
+\end{equation*}
+Función de distribución:
+\begin{equation*}
+F(x)=\left\{
+	\begin{array}{l c l}
+	0 & si & x<x_1 \\
+	^1/_n & si & x_1\leq x<x_2 \\
+	\vdots && \\
+	^{n-1}/_n & si & x_{n-1}\leq x<x_n \\
+	1 & si & x\geq x_n
+	\end{array}
+\right.
+\end{equation*}
+Función generatriz de momentos: $M_x(t)=E[e^{tx}]=\frac 1n\sum e^{tx_i}$, $\forall t\in\mathbb{R}$
+\begin{multicols}{2}
+	\begin{itemize}[label={}]
+		\item $E[X]=\frac 1n\sum x_i$
+		\item $m_k=\frac 1n\sum x_i^k$
+		\item $Var[X]=\frac 1n\sum x_i^2-(\frac 1n\sum x_i)^2$
+		\item $\mu_k=\frac 1n\sum(x_i-\mu)^k$
+	\end{itemize}
+\end{multicols}
+
+\subsection{Distribución de Bernouilli $X\rightsquigarrow B(p)$}
+
+Función masa de probabilidad:
+\begin{equation*}
+P[X=x]=\left\{
+	\begin{array}{l c l}
+	p & si & x=1 \\
+	q=1-p & si & x=0
+	\end{array}
+\right.
+\end{equation*}
+Función de distribución:
+\begin{equation*}
+F(x)=\left\{
+	\begin{array}{l c l}
+	0 & si & x<0 \\
+	q & si & 0\leq x<1 \\
+	1 & si & x\geq 1
+	\end{array}
+\right.
+\end{equation*}
+Función generatriz de momentos: $M_x(t)=E[e^{tx}]=pe^t+q$, $\forall t\in\mathbb{R}$
+\begin{multicols}{2}
+	\begin{itemize}[label={}]
+		\item $E[X]=p$
+		\item $m_k=p^k$
+		\item $Var[X]=pq$
+		\item $\mu_k=q^kp-p^kq$
+	\end{itemize}
+\end{multicols}
+
+\subsection{Distribución binomial $X\rightsquigarrow B(n,p)$}
+
+Función masa de probabilidad:
+\begin{equation*}
+P[X=x]=\left(
+	\!\begin{array}{c}
+	n \\
+	x
+	\end{array}
+\!\right)p^xq^{n-x},\quad x\in\{0,1,\ldots,n\}
+\end{equation*}
+Función generatriz de momentos: $M_x(t)=E[e^{tx}]=(pe^t+(1-p))^n$, $\forall t\in\mathbb{R}$
+\begin{multicols}{2}
+	\begin{itemize}[label={}]
+		\item $E[X]=np$
+		\item $Var[X]=npq$
+	\end{itemize}
+\end{multicols}
+
+\subsection{Distribución geométrica $X\rightsquigarrow G(p)$}
+
+\begin{equation*}
+\underbrace{\begin{array}{c c}
+	\text{\emph{Número de fracasos antes del primer éxito}} & \text{\emph{Número de intentos antes del primer éxito}} \\
+	P[X=x]=q^xp & P[X=x]=q^{x-1}p \\
+	M_{x_1}(t)=\displaystyle\frac{p}{1-qe^t},\quad\forall t<-\ln q 
+	& M_{x_2}(t)=\displaystyle\frac{p}{e^t-q},\quad\forall t>\ln q \\
+	E_1[X]=\displaystyle\frac qp & E_2[X]=\displaystyle\frac 1p \\
+	\end{array}}
+\end{equation*}
+$$Var[X]=\displaystyle\frac{q}{p^2}$$
+
+\subsection{Distribución binomial negativa $X\rightsquigarrow BN(r,p)$}
+
+\begin{equation*}
+\underbrace{\begin{array}{c c}
+	\text{\emph{Número de fracasos antes del r-ésimo éxito}} & \text{\emph{Número de pruebas antes del r-ésimo éxito}} \\
+	P[X=x]=\left(\!\begin{array}{c}
+	x+r-1 \\
+	x
+	\end{array}\!\right)q^xp^r,\;\; x=0,1,\ldots
+	 & P[X=x]=\left(\!\begin{array}{c}
+	x-1 \\
+	r-1
+	\end{array}\!\right)q^{x-r}p^r,\;\; x=1,2,\ldots \\
+	M_{x_1}(t)=\Big(\displaystyle\frac{p}{1-qe^t}\Big)^r,\quad\forall t<-\ln q 
+	& M_{x_2}(t)=\Big(\displaystyle\frac{p}{e^t-q}\Big)^r,\quad\forall t>\ln q \\
+	E_1[X]=\displaystyle\frac{rq}{p} & E_2[X]=\displaystyle\frac rp \\
+	\end{array}}
+\end{equation*}
+$$Var[X]=\displaystyle\frac{rq}{p^2}$$
+
+\subsection{Distribución de Poisson $X\rightsquigarrow P(\lambda)$}
+
+Función masa de probabilidad:
+\begin{equation*}
+P[X=x]=e^{-\lambda}\frac{\lambda^x}{x!},\quad x\in[0,+\infty[
+\end{equation*}
+Función generatriz de momentos: $M_x(t)=e^{-\lambda(e^t-1)}$, $\forall t\in\mathbb{R}$
+$$E[X]=Var[X]=\lambda$$
+
+\subsection{Distribución hipergeométrica $X\rightsquigarrow H(N,n,k)$}
+
+Función masa de probabilidad:
+\begin{equation*}
+P[X=x]=\frac{
+			\left(\!\begin{array}{c}
+			k \\
+			x
+			\end{array}
+			\!\right)
+			\left(\!\begin{array}{c}
+			N-k \\
+			n-x
+			\end{array}
+			\!\right)}{
+			\left(\!\begin{array}{c}
+			N \\
+			n
+			\end{array}
+			\!\right)}
+\end{equation*}
+\begin{multicols}{2}
+	\begin{itemize}[label={}]
+		\item $E[X]=k\displaystyle\frac nN$
+		\item $Var[X]=\displaystyle\frac{kn}{N}(1-\frac kN)\frac{N-n}{N-1}$
+	\end{itemize}
+\end{multicols}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%		 DISTRIBUCIONES CONTINUAS		%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Distribuciones continuas}
+
+\subsection{Distribución uniforme continua $X\rightsquigarrow U(a,b)$}
+
+Función de densidad:
+\begin{equation*}
+f(x)=\left\{
+	\begin{array}{l c l}
+	\displaystyle\frac{1}{b-a} & si & x\in]a,b[\\
+	0 & si & x\notin]a,b[
+	\end{array}
+\right.
+\end{equation*}
+Función de distribución:
+\begin{equation*}
+F(x)=\left\{
+	\begin{array}{l c l}
+	0 & si & x<a \\
+	\displaystyle\frac{x-a}{b-a} & si & a\leq x<b \\
+	1 & si & x\geq b
+	\end{array}
+\right.
+\end{equation*}
+Función generatriz de momentos: $M_x(t)=E[e^{tx}]=\frac 1n\sum e^{tx_i}$, $\forall t\in\mathbb{R}$
+\begin{multicols}{2}
+	\begin{itemize}[label={}]
+		\item $E[X]=\displaystyle\frac{a+b}{2}$\quad(punto medio del intervalo)
+		\item $Var[X]=\displaystyle\frac{(b-a)^2}{12}$
+	\end{itemize}
+\end{multicols}
+
+\subsection{Distribución normal $X\rightsquigarrow N(\mu,\sigma^2)$}
+
+Función de densidad:
+$$f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\displaystyle\frac{(x-\mu)^2}{2\sigma^2}}$$
+
+\subsubsection{Tipificación}
+
+Teniendo $X\rightsquigarrow N(\mu,\sigma^2)$, $Z=\displaystyle\frac{X-\mu}{\sigma}$, entonces:
+\begin{enumerate}[font={\color{rojooscuro}\bfseries}]
+	\item $Z\rightsquigarrow N(0,1)$
+	\item $F_X(x)=F_Z\Big(\displaystyle\frac{x-\mu}{\sigma}\Big)$
+\end{enumerate}
+
+\subsubsection{Aproximaciones a la normal}
+
+\begin{itemize}[font={\color{rojooscuro}\bfseries}]
+	\item \textbf{Aproximación de la binomial: } Se hace cuando $n>10$ y $np>5$, $nq>5$
+	$$X\rightsquigarrow B(n,p)\xrightarrow[X\approx Y]{n\to\infty} Y\rightsquigarrow N(np,npq)$$
+	\item \textbf{Aproximación de la Poisson: } Se hace cuando $\lambda>10$
+	$$X\rightsquigarrow P(\lambda)\xrightarrow[X\approx Y]{\lambda\to\infty} Y\rightsquigarrow N(\lambda,\lambda)$$
+\end{itemize}
+
+\subsection{Distribución exponencial $X\rightsquigarrow exp(\lambda)$}
+
+Función de densidad:
+\begin{equation*}
+f(x)=\lambda e^{-\lambda x}
+\end{equation*}
+\begin{multicols}{2}
+	\begin{itemize}[label={}]
+		\item $E[X]=\displaystyle\frac 1\lambda$
+		\item $Var[X]=\displaystyle\frac{1}{\lambda^2}$
+	\end{itemize}
+\end{multicols}
+
+\subsection{Distribución gamma $X\rightsquigarrow \Gamma(u,\lambda)$}
+
+Función de densidad:
+\begin{equation*}
+f(x)=\frac{\lambda^u}{\Gamma(u)}x^{u-1}e^{-\lambda x}
+\end{equation*}
+Valores de la función Gamma: $\Gamma(k)=(k-1)!$
+
+\subsection{Distribución beta $X\rightsquigarrow \beta(p,q)$}
+
+Función de densidad:
+\begin{equation*}
+f(x)=\frac{1}{\beta(p,q)}x^{p-1}(1-p)^{q-1}
+\end{equation*}
+Valores de la función beta: $\beta(p,q)=\displaystyle\frac{\Gamma(p)\Gamma(q)}{\Gamma(p+q)}$
+\begin{multicols}{2}
+	\begin{itemize}[label={}]
+		\item $E[X]=\displaystyle\frac{p}{p+q}$
+		\item $Var[X]=\displaystyle\frac{pq}{(p+q)^2(p+q+1)}$
+	\end{itemize}
+\end{multicols}
+En el caso de que $p=q=1$, entonces $\beta(p,q)=U(0,1)$.
+
+\end{document}
