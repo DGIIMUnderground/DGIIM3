@@ -1,4 +1,27 @@
-// Paula Villanueva Nuñez
+/*
+Enunciado.
+
+Modificar la solución al problema de los barberos, teniendo en cuenta que:
+
+a) En este caso el barbero pela a dos clientes al mismo tiempo. Sólo pela cuando
+hay dos clientes en la silla de pelar y trabaja con ambos clientes en paralelo.
+Si en un momento dado el barbero quiere pelar pero detecta que no hay al menos
+dos clientes en la sala de espera, se echa a dormir. Cuando ha terminado de
+pelar al par de clientes que hay en la silla, debe despedir a ambos de la
+barbería antes de que vengan otros dos.
+
+b) Adicionalmente, cuando un cliente entra en la barbería debe pasar por la sala
+de espera, independientemente de que el barbero esté durmiendo o pelando. Si un
+cliente llega y se encuentra al barbero durmiendo, antes de entrar en la sala de
+espera, comprueba si ya hay un cliente en la sala de espera y, solo en ese caso,
+despierta al barbero (en otro caso se va a la sala de espera sin despertarlo).
+Por tanto, cuando el barbero duerme, sólo se despertará cuando llegue un segundo
+cliente a la sala de espera. Una vez despertado el barbero avisa a los
+siguientes dos clientes para que salgan de la sala de espera y pasen a ser
+pelados. Todos los clientes antes de pasar a ser pelados deben ser avisados por
+el barbero para que salgan de la sala
+*/
+
 #include <iostream>
 #include <cassert>
 #include <thread>
