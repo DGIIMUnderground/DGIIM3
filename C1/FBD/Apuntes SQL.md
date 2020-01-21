@@ -196,7 +196,7 @@ WHERE EXISTS (
 
 ### Comparadores sobre conjuntos
 
-* Operadores relacionales `<, <=, >, >=` junto a cuantificadores como `ANY, ALL`
+* Operadores relacionales `<, <=, >, >=, <>` junto a cuantificadores como `ANY, ALL`
 
 ## Editar tuplas
 
