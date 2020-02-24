@@ -22,7 +22,9 @@ date: 13/02/2020
 * Hay que enseñar la práctica, de forma aleatoria
 * Si se piensa que no se va a aprobar, se puede pedir realizar un trabajo adicional que suma hasta un punto
 
-# Práctica 1
+--------------------------------------------------------------------------------
+
+# Práctica 1 -- Lección 1 -- Ubuntu Server
 
 ## Distribuciones Linux
 
@@ -50,7 +52,7 @@ date: 13/02/2020
     * *AMI* o *Amazon Image*: por ejemplo Ubuntu Server
 * Vamos a intentar emular lo que hacen estas compañías
 
-### Máquina virtual vs Contenedor
+## Máquina virtual vs Contenedor
 
 * Máquina Virtual significa virtualizar hardware con un hipervisor
 * Los contenedores no virtualizan el hardware
@@ -75,9 +77,7 @@ date: 13/02/2020
     * FaaS: Function as a service: se ofrecen APIs a las que llamamos. *Serverless*
 * `OpenStack` y `ProxMox` para clouds privados
 
-# Lección 1
-
-## Conceptos iniciales
+## Conceptos iniciales - RAID
 
 * Ubuntu Server, Raid1, LVM, Cifrado LUKS
 * **RAID**: redundance array of independent disks
@@ -143,31 +143,18 @@ date: 13/02/2020
     * Implica estar físicamente en la terminal del ordenador para arrancar el ordenador, aunque hay unos `initrd` que permiten conectarse por red (telnet)
 * Hay legislación sobre el cifrado de información personal de los usuarios con los que trabajemos
 
-## **Proceso**
+## Configuración
 
-* Lo primero es hacer unas pequeñas tonterías sobre el idioma, configuración de teclado, región horaria...
-* Llegamos al particionado del disco en el que pasamos a modo manual
-    1. Crear RAID
-    2. Crear el grupo LVM
-    3. Crear vólumenes lógicos LVM sobre el grupo LVM
-        3.1. Boot 400MB
-        3.2. Swap 1024MB
-        3.3. Home 1GB
-        3.4. Root
-    4. Cifrar los volúmenes lógicos
-    5. Formatear los vólumenes lógicos
-        5.1. Elegir el formato de archivos de cada partición
-        5.2. Elegir el punto de montaje de la partición
-    6. Elegir tipo de actualizaciones: sin actualizaciones del sistema
-    7. Elegir los programas a instalar: sistema básico
-* Hago la elección de instalar GRUB en `/dev/sda`: **PREGUNTAR AL PROFESOR SI ESTO ESTA BIEN**
 * **Configuración**:
     * Definir lo que rodea el sistema
     * Propiedades con las que funciona
     * Librerías
     * Dependencias
     * Usuarios y permisos
-* La configuración y el sistema se degrada el sistema temporalmente
+* La configuración y el sistema se degrada el sistema temporalmente, siempre hay que estar manteniendo un servidor aunque este sea completamente estático
+
+## Grub y arranque del sistema
+
 * Instalación del GRUB
     * `/dev/sd<letra>`: sd significa SATA Disk
     * Se instala el GRUB sobre `/dev/sda`: en la BIOS se busca el primer disco, en la partición primera el sector de arranque para arrancar el sistema
@@ -184,6 +171,9 @@ date: 13/02/2020
     * `init.rd`: contiene archivos que se monta como un sistema de ficheros cargado en memoria principal. Sirve para drivers
 * Aquí aparece una técnica muy conocida que es montar como sistema de archivos una zona de memoria principal. Los dispositivos en linux son archivos, así como recursos de red...
     * `/proc` no existe, está en memoria principal
+
+## Networking - Tipos de redes usadas en Virtualización
+
 * **Networking**
     * En la máquina disponemos de una tarjeta de red que es virtual, es creada por Virtual Box
     * Por defecto VirtualBox te da una tarjeta de red configurada en NAT
@@ -197,106 +187,156 @@ date: 13/02/2020
     * Por tanto, podemos sacar paquetes, pero no podemos meter paquetes al sistema, porque no hay forma de direccionar la máquina virtual. Tenemos la máquina virtual completamente protegida, no podemos ser atacados. Pero no podemos ofrecer servicios
     * NAT usa por tanto un esquema de *Whitelist*
     * El problema, no puedo conectar máquinas virtuales entre sí, ni conectar la máquina virtual con el host
-* **Tipos de red que se usan en virtualización**:
-    * **BRIDGE**: 
-        * Se crea una tarjeta de red virtual, con MAC 
-        * La parte de capas 1-3 de OSI se implementa en la tarjeta de red del HOST
-        * Por tanto lecturas y escrituras de red virtual se hacen directamente sobre la real
-        * Podemos sniffear el host desde el guest y viceversa
-        * Así, ofrece directamente acceso a internet
-        * Tenemos mismos recursos de red (se usa la tarjeta física) que el host
-        * No tenemos la capa de seguridad de NAT
-        * Máquinas en BRIDGE se ven entre ellas
-        * Se usa cuando se quiere tener un acceso físico y real a las máquinas virtuales o por temas de eficiencia
-    * **Host-Only**
-        * A la máquina virtual le creamos una tarjeta virtual, y en el HOST creamos otra tarjeta virtual que es distinta a su tarjeta real
-        * La tarjeta virtual del HOST se usa para otros Host-Only de otras máquinas virtuales
-        * Por tanto, la tarjeta virtual solo se usa para comunicar la red virtual
-        * No tenemos acceso a internet. Hace falta configurar en el router las entradas de la tabla de enrutamiento para dar acceso a las máquinas virtuales hacia afuera o viceversa
-        * Lo frecuente en los operadores de cloud
-        * Por tanto, usa un esquema de *white-listing*
-    * **NAT**:
-        * Ya lo hemos comentado algo por encima
-        * Opción por defecto para VirtualBox
-        * NAT te deja acceder a internet de forma directa. NAT te conecta al HOST que deja acceder a la red a la que tiene acceso el HOST.
-        * El HOST está corriendo un servicio de NAT al que se conecta Virtual Box: Network Address Translation
-        * NAT sirve para resolver problemas de agotamiento de direcciones IP
-        * Algunos rangos de IPs derivadas
-            * 10.0.0.0/24
-            * 192.168.0.0/16
-        * NAT corre directamente sobre el router
-        * Por tanto, podemos sacar paquetes, pero no podemos meter paquetes al sistema, porque no hay forma de direccionar la máquina virtual. Tenemos la máquina virtual completamente protegida, no podemos ser atacados. Pero no podemos ofrecer servicios
-        * NAT usa por tanto un esquema de *Whitelist*
-        * El problema, no puedo conectar máquinas virtuales entre sí, ni conectar la máquina virtual con el host
-    * Ahora vamos a definir una tarjeta *Host-Only* y la *NAT* que viene por defecto, así como la tarjeta virtual del *Host-Only* del HOST
-        * Vamos a usar Host-Only para acceder por SSH a nuestra máquina virtual (tiene que funcionar el ping)
-        * Tiene que salir la tarjeta de red al hacer `ifconfig -a` en el HOST
-        * En la máquina añadimos una nueva tarjeta de red HOSTONLY
-    * `/etc/network/interfaces`
-    * A Host-Only no damos `DHCP`, asignamos nosotros a mano la IP
-    * `ifup enp0s8` o restart con `/etc/init.d/networking restart`
-    * Testeo host->virtual con `ping 192.168.56.10`
-    * Testeo virtual->host con `ping 192.168.56.1`
-* Para enseñar las practicas: lsblk o los pings de antes
+* **BRIDGE**: 
+    * Se crea una tarjeta de red virtual, con MAC 
+    * La parte de capas 1-3 de OSI se implementa en la tarjeta de red del HOST
+    * Por tanto lecturas y escrituras de red virtual se hacen directamente sobre la real
+    * Podemos sniffear el host desde el guest y viceversa
+    * Así, ofrece directamente acceso a internet
+    * Tenemos mismos recursos de red (se usa la tarjeta física) que el host
+    * No tenemos la capa de seguridad de NAT
+    * Máquinas en BRIDGE se ven entre ellas
+    * Se usa cuando se quiere tener un acceso físico y real a las máquinas virtuales o por temas de eficiencia
+* **Host-Only**
+    * A la máquina virtual le creamos una tarjeta virtual, y en el HOST creamos otra tarjeta virtual que es distinta a su tarjeta real
+    * La tarjeta virtual del HOST se usa para otros Host-Only de otras máquinas virtuales
+    * Por tanto, la tarjeta virtual solo se usa para comunicar la red virtual
+    * No tenemos acceso a internet. Hace falta configurar en el router las entradas de la tabla de enrutamiento para dar acceso a las máquinas virtuales hacia afuera o viceversa
+    * Lo frecuente en los operadores de cloud
+    * Por tanto, usa un esquema de *white-listing*
+* **NAT**:
+    * Ya lo hemos comentado algo por encima
+    * Opción por defecto para VirtualBox
+    * NAT te deja acceder a internet de forma directa. NAT te conecta al HOST que deja acceder a la red a la que tiene acceso el HOST.
+    * El HOST está corriendo un servicio de NAT al que se conecta Virtual Box: Network Address Translation
+    * NAT sirve para resolver problemas de agotamiento de direcciones IP
+    * Algunos rangos de IPs derivadas
+        * 10.0.0.0/24
+        * 192.168.0.0/16
+    * NAT corre directamente sobre el router
+    * Por tanto, podemos sacar paquetes, pero no podemos meter paquetes al sistema, porque no hay forma de direccionar la máquina virtual. Tenemos la máquina virtual completamente protegida, no podemos ser atacados. Pero no podemos ofrecer servicios
+    * NAT usa por tanto un esquema de *Whitelist*
+    * El problema, no puedo conectar máquinas virtuales entre sí, ni conectar la máquina virtual con el host
+* En la práctica vamos a definir una tarjeta *Host-Only* y la *NAT* que viene por defecto, así como la tarjeta virtual del *Host-Only* del HOST:
+    * Vamos a usar Host-Only para acceder por SSH a nuestra máquina virtual (tiene que funcionar el ping)
+    * Tiene que salir la tarjeta de red al hacer `ifconfig -a` en el HOST
+    * En la máquina añadimos una nueva tarjeta de red *Host-Only*
+    * Editamos `/etc/network/interfaces` para la conexión *Host-Only*, la *NAT* ya viene configurada
+        * A Host-Only no damos `DHCP`, asignamos nosotros a mano la IP
+        * `auto enp0s8`
+        * `iface enp0s8 inet static`
+        * `address 192.168.56.10`
+    * Para levantar la nueva conexión: `ifup enp0s8` o restart con `/etc/init.d/networking restart`
+    * Para comprobar que hemos hecho bien las conexiones (las IPs pueden cambiar según nuestro ordenador o cómo hayamos asignado la IP del *Host-Only*)
+        * Testeo host->virtual con `ping 192.168.56.10`
+        * Testeo virtual->host con `ping 192.168.56.1`
+
+## **Proceso** 
+
+* Lo primero es hacer unas pequeñas tonterías sobre el idioma, configuración de teclado, región horaria...
+* Llegamos al particionado del disco en el que pasamos a modo manual
+    1. Crear RAID
+    2. Crear el grupo LVM
+    3. Crear vólumenes lógicos LVM sobre el grupo LVM
+        3.1. Boot 400MB
+        3.2. Swap 1024MB
+        3.3. Home 1GB
+        3.4. Root
+    4. Cifrar los volúmenes lógicos
+    5. Formatear los vólumenes lógicos
+        5.1. Elegir el formato de archivos de cada partición
+        5.2. Elegir el punto de montaje de la partición
+    6. Elegir tipo de actualizaciones: sin actualizaciones del sistema
+    7. Elegir los programas a instalar: sistema básico
+    8. Instalación de GRUB: gestor de arranque del sistema
+    9. Configurar red de VirtualBox
+        9.1. Crear tarjeta NAT y tarjeta Host-Only
+        9.2. Configurar las conexiones en VirtualBox (el *Host-Only*)
+        9.3. Configurar la conexión en la máquina virtual -> `/etc/network/interfaces`
+        9.4. Levantar la red con `ifup`
+        9.5. Comprobar las dos conexiones con el `ping`
+* Para enseñar esta lección: `lsblk` para mostrar la estructura de las particiones ó `ping` de comprobaciones para la configuración de red
 
 --------------------------------------------------------------------------------
 
-# Segunda Lección -- CentOS con particionado automático
+# Práctica 1 -- Lección 2 -- CentOS con particionado automático
 
-* Motivación:
-    * Gestionaremos LVM por línea de comandos
-    * Suponemos que `/var` se nos ha llenado, y `/var` no tiene un volumen lógico solo para él
-    * Hay que apagar el sistema, añadir un disco y asignarlo a `/var`
-    * Suponemos que se vuelve a llenar, pero como tenemos `/var` en un volumen lógico lo vamos a poder redimensionar
-* Le asignamos la misma tarjeta *Host-Only* de la primera lección, así nos podemos comunicar con los servidores de Ubuntu
-* Podemos acceder a CentOS como root directamente
-* `ip link show`
-* Partimos sin acceso a internet porque CentOS no lo configura por defecto
-* `cd /etc/sysconfig/network-scripts`
-* `vi ifcfg-enp0s3`: ponemos `ONBOOT=yes`
-* `ifup enp0s3`
-* `ip link show`
-* `ip addr` para mostrar el networking
-* Copiamos el archivo ifcfg-enp0s3 y ponemos el nombre de la interfaz localhost
-    * Borramos hasta NAME=enp0s3 y lo ponemos a 8
-    * Nos quedamos con TYPE, NAME, DEVICE, ONBOOT=yes, IPADDR = 192.168.56.20, NETMASK
-* Levantamos con ifup enp08
-* Hacemos ping para comprobar
-* `lsblk`
-    * Una partición para `/boot` en `/sda1`
-    * En `/sda2`: volumen para root y para swap
-* `pvdisplay`: pv de physical volume
-* `vgdisplay`: vg de volume group
-    * Free a 0: tenemos todo el grupo asignado a volumenes logicos
-* Volumenes logicos hace `/dev/<grupo_volumenes>/<volumen_logico>`
-* `/dev/mapper/<grupo>-<volumen>`
-* `dd if=/dev/zero of=/var/log/zeros.raw bs=1024k count=1024`: para ocupar todo el 
-    * `/dev/zero` devuelve ceros todo el rato
-    * `/dev/random`: devuelve aleatorios, pero es mejor usar `/dev/zero`. En máquinas virtuales puede no funcionar porque la aleatoriedad depende de un dispositivo físico
-* `df -h`: para ver como van los discos duros
-* `du -s`: para ver que directories se comen el espacio
-* Ahora apagamos para añadir un disco
-    * Esto por virtualbox, si tuviésemos hotplug no haría falta el apagado
-    * Particionado
-        * Caso 1:
-            * `fdisk` para particionar el nuevo disco
-            * Creamos una sola partición
-    * `pvcreate /dev/sdb1`
-        * No hace nada, etiqueta la partición para ser usada por LVM
-* Añadimos el volumen fisico al grupo de volumenes
+## Motivación
+
+* Gestionaremos LVM por línea de comandos
+* Suponemos que `/var` se nos ha llenado, y `/var` no tiene un volumen lógico solo para él
+* Hay que apagar el sistema, añadir un disco y asignarlo a `/var`
+* Suponemos que se vuelve a llenar, pero como tenemos `/var` en un volumen lógico lo vamos a poder redimensionar
+
+## Notas
+
+* Podemos acceder a CentOS como root directamente. Esto no lo podemos hacer en Ubuntu
+* No tenemos `ifconfig`, así que usaremos `ip link show` como equivalente, también vale `ip addr`
+
+## **Proceso**
+
+1. Configuración de tarjetas
+    * Le asignamos la misma tarjeta *Host-Only* de la primera lección, así nos podemos comunicar con los servidores de Ubuntu. 
+    * Para la red NAT dejamos la que viene por defecto
+2. Configuración para acceso a internet
+    * Hacemos `ip link show` para ver que tenemos la tarjeta *NAT* y la tarjeta *Host-Only*
+    * Partimos sin acceso a internet porque CentOS no lo configura por defecto
+    * Para configurar los archivos que dan acceso a internet: 
+        * `vi /etc/sysconfig/network-scripts/ifcfg-enp0s3`
+        * En general: `vi /etc/sysconfig/network-scripts/ifcfg-<nombre_tarjeta_red>`
+        * Hay que poner `ONBOOT=yes`
+    * Levantamos internet con `ifup enp0s3` 
+    * Podemos hacer ping a una dirección de internet para comprobar que lo hemos hecho bien
+    * Ahora configuramos la tarjeta *Host-Only*
+        * Copiamos el archivo `ifcfg-enp0s3` y ponemos el nombre de la interfaz localhost: `ifcfg-enp0s8`
+            * Borramos hasta NAME=enp0s3 y lo ponemos a enp0s8
+            * Nos quedamos con `TYPE, NAME, DEVICE, ONBOOT=yes, IPADDR = 192.168.56.20, NETMASK = 255.255.255.0`
+        * Levantamos con ifup enp0s8
+        * Hacemos ping a nuestro HOST para comprobar
+        * Hacemos ping de nuestro HOST a la máquina virtual para comprobar
+3. Consulta de la estructura LVM por comandos
+    * `lsblk` para ver la estructura de las particions
+        * Tenemos una partición para `/boot` en `/sda1`
+        * En `/sda2` tenemos un volumen para root y para otro para swap
+    * Para gestionar volúmenes lógicos disponemos de los comandos:
+        * `pvdisplay`: pv de physical volume
+        * `vgdisplay`: vg de volume group
+    * Con estos comandos vemos que tenemos `Free` a 0: tenemos todo el grupo de volúmenes asignado a volumenes logicos
+    * Los volúmenes lógicos se organizan de la forma `/dev/<grupo_volumenes>/<volumen_logico>`
+    * Tambien se pueden acceder de la forma `/dev/mapper/<grupo>-<volumen>`
+4. Llenamos `/var` de basura para simular un ocupado de su espacio
+    * `dd if=/dev/zero of=/var/log/zeros.raw bs=1024k count=1024`: para ocupar todo el espacio
+        * `/dev/zero` devuelve ceros todo el rato
+        * `/dev/random`: devuelve aleatorios, pero es mejor usar `/dev/zero`. En máquinas virtuales puede no funcionar porque la aleatoriedad depende de un dispositivo físico
+    * Consultamos el estado del disco:
+        * `df -h`: para ver como van los discos duros
+        * `du -s`: para ver que directories se comen el espacio
+5. Añadimos un disco para colocar ahí `/var`
+    * Apagamos para añadir un disco. Esto es debido a Virtualbox, si tuviésemos hotplug no haría falta el apagado
+6. Particionado del disco
+    * Caso 1:
+        * `fdisk` para particionar el nuevo disco
+        * Creamos una sola partición
+        * `pvcreate /dev/sdb1`: no hace nada, solamente etiqueta la partición para ser usada por LVM
+7. Añadimos el volumen fisico al grupo de volumenes
     * `vgextend cl /dev/sdb1`
-    * Ahora tenemos free en `vgdisplay`
-    * `lvcreate -l 4G nvar cl`
-* Ahora busco llevar `var` desde `/` a `nvar`
-    * Tengo que formatear el nuevo volumen
-    * `mkfs -t ext4 /dev/cl/nvar`
-    * `mkdir nvar`
-    * `mount /dev/cl/nvar /mnt/nvar`
-    * `systemctl runlevel1.target`: pasamos a mono procesador o con `init1` para modo mantenimiento
-        * No quiero que cuando esté copiando var se me escriban nuevas cosas en var
-        * cp -a /var/* /mnt/nvar
-    * `mv /var /oldvar`: copia de seguridad
-    * `umount /mnt/nvar`
-    * `vi /etc/fstab`: para configurar montajes automáticamente
-    * `mount -a`: monta según el `fstab`
-    * `reboot`
+        * En general: `vgextend <grupo_volumenes> <particion>`
+    * Ahora haciendo `vgdisplay` vemos que hay espacio en `free`
+8. Creamos un volumen lógico específico para `/var`
+    * `lvcreate -L 4G -n nvar cl `: lo llamamos `nvar` para identificar el volumen lógico
+        * En general: `lvcreate -l <tamaño> -n <nombre_nuevo> <grupo_volumenes> `
+9. Llevar `/var` desde `/` a `nvar`
+    9.1. Formatear el nuevo volumen
+        * `mkfs -t ext4 /dev/cl/nvar`
+    9.2. Copia de `/var` en Modo Mantenimiento
+        * `systemctl runlevel1.target` o `init1`: pasamos a mono procesador para modo mantenimiento (no queremos que se escriban archivos en `/var` mientras hacemos la copia)
+            * `mkdir nvar`
+            * `mount /dev/cl/nvar /mnt/nvar`
+            * `cp -a /var/* /mnt/nvar`
+            * `mv /var /oldvar`: copia de seguridad por si la copia de `/var` en `/nvar` ha ido mal
+            * `umount /mnt/nvar`
+    9.3. Configurar el montaje automático de `nvar`
+        * `vi /etc/fstab`: para configurar montajes automáticamente
+            * `/dev/cl/nvar /var ext4 defaults 0 0`
+        * `mount -a`: monta según el `fstab`
+        * `reboot` para comprobar que lo hemos hecho de forma correcta
