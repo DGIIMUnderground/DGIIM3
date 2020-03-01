@@ -118,7 +118,7 @@ date: 13/02/2020
 
 * Logic Volume Management o Sistema de Volúmenes Lógicos
 * *Physcal Volume* o *PV*:
-    * Puede ser una partición de un disco duro, un RAID, un volúmen virtual...
+    * Puede ser una partición de un disco duro, un RAID, un volumen virtual...
 * Agrupamos nuestros *PV* sobre un *Grupo de Volumen*
     * El almacenamiento se va acumulando
     * Definimos volúmenes lógicos sobre el grupo
@@ -291,7 +291,7 @@ date: 13/02/2020
         * Copiamos el archivo `ifcfg-enp0s3` y ponemos el nombre de la interfaz localhost: `ifcfg-enp0s8`
             * Borramos hasta NAME=enp0s3 y lo ponemos a enp0s8
             * Nos quedamos con `TYPE, NAME, DEVICE, ONBOOT=yes, IPADDR = 192.168.56.20, NETMASK = 255.255.255.0`
-        * Levantamos con ifup enp0s8
+        * Levantamos coSnapshot 1n ifup enp0s8
         * Hacemos ping a nuestro HOST para comprobar
         * Hacemos ping de nuestro HOST a la máquina virtual para comprobar
 3. Consulta de la estructura LVM por comandos
@@ -329,7 +329,7 @@ date: 13/02/2020
     9.1. Formatear el nuevo volumen
         * `mkfs -t ext4 /dev/cl/nvar`
     9.2. Copia de `/var` en Modo Mantenimiento
-        * `systemctl runlevel1.target` o `init1`: pasamos a mono procesador para modo mantenimiento (no queremos que se escriban archivos en `/var` mientras hacemos la copia)
+        * `systemctl isolate runlevel1.target` o `init1`: pasamos a mono procesador para modo mantenimiento (no queremos que se escriban archivos en `/var` mientras hacemos la copia)
             * `mkdir nvar`
             * `mount /dev/cl/nvar /mnt/nvar`
             * `cp -a /var/* /mnt/nvar`
@@ -340,3 +340,111 @@ date: 13/02/2020
             * `/dev/cl/nvar /var ext4 defaults 0 0`
         * `mount -a`: monta según el `fstab`
         * `reboot` para comprobar que lo hemos hecho de forma correcta
+
+## Parte final
+
+* Se vuelve a llenar var, lo ampliaremos gracias a que ahora ya lo tenemos configurado en un LVM
+* `lvextend  --size +3GB /dev/cl/nvar`: no doy 4 por la parte de extensión, para que no caiga el sistema
+    * No especifico el grupo porque nvar ya esta en el grupo cl
+* `df -h`: sigue mostrando 3GB
+    * Al formatear una partición se crea la tabla de inodos
+    * Al crear el nvar tenemos una tabla de inodos para 3GB, hay que **extender el sistema de ficheros**
+* `resize2fs /dev/cl/nvar`
+
+--------------------------------------------------------------------------------
+
+# Práctica 1 -- Lección 3 -- Cifrado y RAID en CentOS
+
+* A partir de la anterior lección, a nuestro servidor de CentOS le damos una RAID1 con cifrado LUKS
+* `/var` montado sobre `nvar` tiene información sensible: queremos redundancia con RAID1 y debemos cifrarlo
+1. Crear RAID1
+2. Creamos phisycal volume y un volume group para el raid1
+3. Creamos un logical volumen tomado del gv raid_group al que llamamos rvar
+4. Cifrar con LUKS
+
+## Proceso
+
+1. Creación de RAID
+    1.1. Creamos dos discos del mismo tamaño en VirtualBox
+    1.2. Usamos `mdadmin`
+        * `yum install mdadm`
+        * `yum provides <paquete>`: para buscar paquetes que dan el paquete, junto a otros
+    1.3. Comprobamos los dos discos con `lsblk`
+    1.4. Creamos el raid con: `mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdc /dev/sdd`
+        * Suelta un error sobre que el disco no va a ser arrancable, que en nuestro caso nos da igual
+        * Se pueden definir particiones antes del RAID
+        * Sin definir particiones se usa todo el espacio en modo raw: no se reserva ningun espacio de disco
+    1.5. Comprobamos el RAID con `lsblk`
+2. Comprobación del estado del RAID con `/proc`
+    * `/proc` no es un sistema de ficheros real, es un reflejo de la memoria del sistema operativo
+        * El módulo RAID se refleja en `/proc/mdstat` al que podemos hacer un `less`
+3. Añadir el RAID a un nuevo grupo de volúmenes lógicos
+    * Si lo añado al general, cuando le demos un bocado no sabemos a que tipo de disco le estamos dando el bocado.
+    * La idea de los grupos de volumenes es segregar según las características de almacenamiento. Creo un grupo que usa siempre discos en RAID1
+    * `pvcreate /dev/md0`: para dar el volumen fisico inicial al RAID
+    * `vgcreate raid_group /dev/md0`
+        * No se puede crear vacio, hay que darle un volumen fisico inicial, en nuestro caso el RAID1
+        * `vgdisplay` para ver que hemos hecho bien el proceso
+    * `lvcreate --size 7G --name rvar raid_group`: para crear un volumen lógico sobre el nuevo grupo de volúmenes
+    * `lsblk` muestra ahora el nuevo volumen lógico
+4. Cifrado del volumen
+    * Podemos dar formato de ficheros, aunque al cifrarlo se va a perder, por lo que ciframos primero
+    * `yum install cryptsetup`: `cryptsetup` es el programa que vamos a usar para cifrar con LUKS
+    * `luksFormat`: comando que usamos
+        * Hace una especie de formateo, pero realmente cifra los sectores
+        * Se puede asignar un archivo key en vez de contraseña, al estilo `ssh`
+        * `crypsetyp luksFormat /dev/raid_group/rvar`: introducimos la contraseña y se cifra
+5. Abertura del dispositivo cifrado
+    * Ahora `lsblk` no muestra ningún cambio con lo hecho hasta ahora, no se muestra el cifrado del dispositivo
+    * Antes de usar el dispositivo, hay que usar un `open` que crea un dispositivo sobre el que montarlo y hacer operaciones. Si intentamos montarlo sin más, debido al cifrado, no vamos a poder hacer el montaje
+    * `cryptsetup open /dev/raid_group/rvar raid1-rvar-cryp`: hay que indicar el dispositivo que creamos
+        * Se elige este nombre para seguir con la jerarquía que utiliza linux
+        * Haciendo `lsblk` se visualiza esta jerarquía
+6. Copiar `nvar` en `rvar`
+    * Ahora aplicamos la misma copia que hicimos al llevar `var` a `nvar`
+        * Formateamos
+        * Montamos
+        * Copiamos
+    6.1. Formateamos la partición
+        * `mkfs -t xfs /dev/mapper/raid1-rvar-crypt`
+    6.2. Montamos la partición para hacer la posterior copia
+        * `mkdir /mnt/rvar`
+        * `mount /dev/mapper/raid1-rvar-crypt /mnt/rvar`
+    6.3. Modo mantenimiento
+        * Opción 1: `systemctl isolate runlevel1.target`
+            * `systemctl status` para ver el estado de modo mantenimiento
+        * Opción 2: `init1`
+        * Necesito estar sí o sí en modo mantenimiento, pues voy a desmontar en caliente `var`
+    6.4. Copia de los archivo
+        * `cp -a /var/* /mnt/rvar`
+    6.5. Desmontaje de var
+        * `umount /var` -> necesito modo mantenimiento
+        * No le deja al profesor pero a mi en casa si
+7. Configurar `rvar` para que se monte automáticamente en `/var`
+    7.1. Editar el fstab
+        * `vi /etc/fstab`: para arranque automatico
+        * Cambio la linea de nvar por `/dev/mapper/raid1-rvar-crypt /var xfs defaults 0 0`
+        * `umount /mnt/rvar`
+        * `mount -a`: para comprobar que hemos editado bien el archivo
+    * 7.2. Editar el crypttab
+        * `crypttab`: como fstab pero para encriptados
+            * Usa el mismo formato que el comando `cryptsetup open`
+            * En vez del nombre usa el UUID que podemos ver con `blkid`
+        * `vi /etc/crypttab` para editar la tabla
+            * Para tomar el UUID de forma cómoda usamos: `blkid | grep "/dev/mapper/raid1-rvar" >> /etc/crypttab`
+            * `<nombre_que_doy> UUID=<UUID> <opciones>`
+                * Opciones suele tener el archivo con la llave. Si no se pone nada, se pide la contraseña
+                * El nombre tiene que coincidir con el de `fstab` para que el montaje se haga de forma correcta
+            * En nuestro caso será: `raid1-rvar-cryp UUID=124314123123 none`
+    * En estos pasos podemos romper la secuencia de inicio, con lo que el sistema lanzará una consola de emergencia. Esta consola se almacena en el archivo `/boot/initrc`
+8. Comprobamos que hemos hecho todo bien
+    * `reboot` para probar que nada falla al iniciar el sistema
+    * `lsblk` para ver que todo se ha montado bien
+9. Liberamos el espacio de `nvar`
+    * `lvremove /dev/cl/nvar`
+    * `lsblk` para ver que todo tiene la estructura deseada
+    * `vgdisplay` para ver que el grupo tiene mas espacio `free` que antes
+10. Eliminamos un disco para ver que `/proc/mdstat` nos da información del estado del RAID
+    * Borramos un disco en virtualbox
+    * `lsblk` muestra solo un disco
+    * `less /proc/mdstat`: muestra que ha caído un disco -> veremos esto en profundidad en la práctica 3
