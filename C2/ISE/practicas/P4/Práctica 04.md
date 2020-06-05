@@ -52,7 +52,7 @@ author: Sergio Quijano Rey
 * Simula una carga mucho más real, distribuida
 * Es un estándar
     * Sirve como ficheros de configuración para almacenar información de cargas en otros servicios
-    * Por ejemplo, podemos usar ficheros de configuración `jmeter` en [Gatling](gatling.io)
+    * Por ejemplo, podemos usar ficheros de configuración `jmeter` en [Gatling](https://gatling.io)
 * Lo vamos a usar en contexto HTTP, aunque se puede cargar para otros comportamientos
 * Cargas sintéticas: simulamos usuarios de forma artificial
 * Pueden ser cargas reales
