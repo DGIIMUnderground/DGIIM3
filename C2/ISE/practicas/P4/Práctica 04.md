@@ -185,7 +185,7 @@ author: Sergio Quijano Rey
 * `JWT`:
     * Va codificado, que no significa que esté cifrado
     * La información, en el hash, va firmado
-    * Se puede descodificar en [jwt.io](jwt.io)
+    * Se puede descodificar en [jwt.io](https://jwt.io)
     * Comprobaciones de forma automática en código de `node.js`:
         * Objeto `payload` con los campos:
             * `iat`: initialized at, indica el momento en el que se creó el token
@@ -291,7 +291,7 @@ author: Sergio Quijano Rey
     * El usuario y contraseña viene documentado en el guión de prácticas, así como en la web principal de la API
 8. Comprobamos que todo funciona
     * Ejecutamos el test y del `Visualizador de resultados` tomamos el token
-    * Comprobamos la información del token en la web [jwt.io](jwt.io)
+    * Comprobamos la información del token en la web [jwt.io](https://jwt.io)
     * Este `jwt` nos sirve para hacer peticiones al usuario indicado en `Login Alumno`
 9. Tomo el token que se me ha dado, porque me va a hacer falta
     * `Login Alumno -> Add -> Post Processor -> Regular Expression Extractor`
@@ -417,7 +417,7 @@ author: Sergio Quijano Rey
     * Add -> Non-Test Element -> Http test script recorder
         * Name: Grabacion HTTP
         * Start
-        * Vamos a la página [apache.org](apache.org)
+        * Vamos a la página [apache.org](https://apache.org)
     * Añadimos al plan -> THREAD GROUP
     * Al Thread Group añadimos recording controller
          * Name: Registro Apache.org
@@ -427,7 +427,7 @@ author: Sergio Quijano Rey
 * Firefox: preferencias: proxy: manual proxy
     * http proxy: localhost
     * port: 8888
-* Abro [apache.org](apache.org)
+* Abro [apache.org](https://apache.org)
     * Ya en el registro podemos ver todas las peticiones que estamos haciendo
     * Podemos ver que las cabeceras que se generan son todo el rato las mismas
     * Esto último es un incoveniente porque genera mucha basura, las cabeceras no aportan demasiada información nueva
