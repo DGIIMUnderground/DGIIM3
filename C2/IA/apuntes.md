@@ -1,4 +1,4 @@
-# Tema 1
+# Tema 1. Introducción a la Inteligencia Artificial
 
 ## Definición de Inteligencia e Inteligencia Artificial
 La **inteligencia** se puede definir como la capacidad de resolver problemas o elaborar productos que sean valiosos en una o más culturas
@@ -81,4 +81,83 @@ Como en otros campos de la ciencia/técnica, los límites actuales de la IA los 
 
 ## Métodos en Inteligencia Artificial
 
-> A partir de la diapo 56 del tema 1
+La **inteligencia** es la capacidad de encontrar rápidamente una solución adecuada en lo que en principio es un inmenso espacio de alternativas.
+
+La **búsqueda** aparece como algo que debe realizar todo (o casi todo) sistema que pretendamos que manifieste una conducta inteligente. 
+
+- La búsqueda por fuerza bruta (capacidad de cálculo de un ordenador) ha demostrado ser inútil salvo para problemas muy simples.
+- La búsqueda por fuerza bruta no es la forma humana de resolver problemas. Empleamos **conocimiento**.
+
+El **principio del conocimiento** se basa en que un sistema exhibe un comportamiento inteligente, debido principalmente al conocimiento que puede manejar: conceptos, hechos, representaciones, métodos, modelos, metáforas y heurísticas en su dominio de actuación.
+
+Así, la **IA** es la búsqueda con conocimiento sobre el espacio de soluciones del problema a resolver. Representación de las posibles soluciones. Representación del conocimiento experto.
+
+Podemos encontrar problemas complejos en ambientes parcialmente conocidos: flexibilidad, modularidad y escalabilidad.
+
+Además, con la estrategia de divide y venceras obtenemos el concepto de agente y sistemas multiagente.
+
+## Agentes inteligentes
+
+La **inteligencia artificial** es el ámbito cientifico/técnico dedicado a la construcción de agentes que exhiben aspectos de comportamiento inteligente (racionalidad). Los agentes permiten dar una nueva forma de mostrar la Inteligencia Artificial.
+
+Un **Agente** es un sistema (de ordenador) situado en algún entorno, que es capaz de realizar acciones de forma autónoma y que es flexible para lograr los objetivos planteados.
+
+- **Situación**: el agente recibe entradas sensoriales de un entorno en donde está situado y realiza acciones que cambian dicho entorno.
+- **Autonomía**: el sistema es capaz de actuar sin la intervención directa de los humanos y tiene control sobre sus propias acciones y estado interno.
+
+Los agentes pueden ser **flexibles**:
+
+- **Reactivo**: el agente debe percibir el entorno y responder de una forma temporal a los cambios que ocurren en dicho entorno.
+- **Pro-activo**: los agentes no deben simplemente actuar en respuesta a su entorno, deben de ser capaces de exhibir comportamientos dirigidos a lograr objetivos que sean oportunos, y tomar la iniciativa cuando sea apropiado.
+- **Social**: los agentes deben de ser capaces de interactuar, cuando sea apropiado, con otros agentes artificiales o humanos para completar su propio proceso de resolución del problema y ayudar a otros con sus actividades.
+
+Un **Sistema Basado en Agentes** es un sistema en el que la abstracción clave utilizada es precisamente la de agente.
+
+Un **Sistema multi-agente** es un sistema diseñado e implementado con varios agentes interactuando. Los sistemas multi-agente son interesantes para representar problemas que tienen múltiples formas de ser resueltos, múltiples perspectivas y/o múltiples entidades para resolver el problema.
+
+Además, los agentes son capaces de **interaccionar**:
+
+- **Cooperación**: trabajar juntos para resolver
+algo.
+- **Coordinación**: organizar una actividad para evitar las interacciones perjudiciales y explotar las beneficiosas.
+- **Negociación**: llegar a un acuerdo que sea aceptable por todas las partes implicadas.
+
+
+### Sistemas Multi-Agente
+
+Predomina la **Inteligencia Artificial Distribuida**.
+
+Un **Sistema Multiagente** (SMA) es una red más o menos unida de resolvedores de problemas que trabajan conjuntamente para resolver problemas que están más allá de las capacidades individuales o del conocimiento de cada uno de ellos.
+
+Un **resolvedor** es un agente autónomo y de naturaleza heterogénea.
+
+Las características de un SMA son:
+
+- Cada agente tiene información incompleta, o no todas las capacidades para resolver el problema, así cada agente tiene un punto de vista limitado.
+- No hay un sistema de control global.
+- Los datos no están centralizados.
+- La computación es asíncrona.
+
+La **cooperación** es una herramienta fundamental en la formación de equipos.
+
+La **negociación** es la coordinación y la resolución de conflictos.
+
+## Arquitecturas de agentes
+
+Con respecto a las **arquitecturas de agentes**, podemos clasificarlas por su **topología** o por su **nivel de abstracción**.
+
+Según su **topología**, podemos distinguir las siguientes arquitecturas:
+
+- **Arquitecturas horizontales**: las capas están cada una encima de otra sin comunicación y son capaces de percibir el entorno y realizar acciones.
+- **Arquitecturas verticales**: una capa se encarga de percibir el entorno y así transmitir la información a través de las capas de forma consecutiva hasta la última, que se encarga de realizar las acciones.
+- **Arquitecturas híbridas**: una capa se encarga de realizar las acciones y todas las capas reciben y transmiten la información de forma consecutiva.
+
+Según su **nivel de abstracción**, podemos distinguir las siguientes arquitecturas:
+
+- **Arquitecturas deliberativas**: son aquellas que incluyen un modelo centralizado de representación simbólica del entorno y razonan sobre él para actuar. Suelen tener estructura vertical.
+- **Arquitecturas reactivas**: no incluye un modelo centralizado de representación simbólica del mundo ni hace uso de razonamiento complejo. Se construyen bajo esquemas de percepción y acción. Suelen tener arquitectura horizontal.
+- **Arquitecturas híbridas**: combinan las arquitecturas anteriores. Tienen estructura vertical o mixta.
+
+# Tema 2. Estrategias de búsqueda no informada
+
+> Seguir aquí
