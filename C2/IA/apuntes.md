@@ -83,7 +83,7 @@ Como en otros campos de la ciencia/técnica, los límites actuales de la IA los 
 
 La **inteligencia** es la capacidad de encontrar rápidamente una solución adecuada en lo que en principio es un inmenso espacio de alternativas.
 
-La **búsqueda** aparece como algo que debe realizar todo (o casi todo) sistema que pretendamos que manifieste una conducta inteligente. 
+La **búsqueda** aparece como algo que debe realizar todo (o casi todo) sistema que pretendamos que manifieste una conducta inteligente.
 
 - La búsqueda por fuerza bruta (capacidad de cálculo de un ordenador) ha demostrado ser inútil salvo para problemas muy simples.
 - La búsqueda por fuerza bruta no es la forma humana de resolver problemas. Empleamos **conocimiento**.
@@ -154,9 +154,32 @@ Según su **topología**, podemos distinguir las siguientes arquitecturas:
 
 Según su **nivel de abstracción**, podemos distinguir las siguientes arquitecturas:
 
-- **Arquitecturas deliberativas**: son aquellas que incluyen un modelo centralizado de representación simbólica del entorno y razonan sobre él para actuar. Suelen tener estructura vertical.
-- **Arquitecturas reactivas**: no incluye un modelo centralizado de representación simbólica del mundo ni hace uso de razonamiento complejo. Se construyen bajo esquemas de percepción y acción. Suelen tener arquitectura horizontal.
-- **Arquitecturas híbridas**: combinan las arquitecturas anteriores. Tienen estructura vertical o mixta.
+### Arquitecturas reactivas
+
+Un **agente reactivo**, tras percibir el entorno a través de sus sensores, actúa de forma rápida y efectiva. Tienen una representación interna de su entorno. Toman acciones basadas en el presente, sin tener en cuenta las del pasado. Son agentes relativamente simples y actúan con con otros de manera
+
+Características:
+- Comportamiento diseñado de manera explícita. Necesario anticipar todas las opciones.
+- Cálculos sencillos y rápidos.
+- Sin historial de percepciones.
+- Tienen un sistema de reglas.
+- Usan arquitecturas horizontales.
+
+### Arquitecturas deliberativas
+
+Los **agentes deliberativos** disponen de un modelo del mundo y otro de los efectos de sus acciones en el mismo. Toman decisiones a través del razonamiento lógico, y son capaces de recordar sus acciones pasadas. Todo esto lo hacen con la finalidad de lograr su objetivo.
+
+Características:
+- Tienen un conocimiento del mundo.
+- Cálculos más complicados.
+- Elaboran planes en base a los efectos de sus acciones en los modelos de los que dispone.
+- Usan arquitecturas verticales.
+
+### Arquitecturas híbridas
+
+Los agentes híbridos combinan las arquitecturas anteriores. Tienen estructura vertical o mixta.
+
+
 
 # Tema 2. Estrategias de búsqueda no informada
 
