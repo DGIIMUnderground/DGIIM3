@@ -183,4 +183,32 @@ Los agentes híbridos combinan las arquitecturas anteriores. Tienen estructura v
 
 # Tema 2. Estrategias de búsqueda no informada
 
-> Seguir aquí
+## Sistemas de producción
+
+c1 -> a1, ..., cm -> am, en donde Ci es una función booleana definida sobre el vector de características, habitualmente una conjunción de literales booleanos.
+Ejecución de un sistema de producción:
+
+1. Se selecciona la primera regla y se comprueba si se cumple su condición. En caso contrario, se continúa con la siguiente hasta que se encuentre una regla con condición con valor 1.
+2. La acción de la primera regla encontrada cuya condición  sea 1 es la que se ejecuta. Su acción puede ser:
+    - La ejecución de una o varias acciones primitivas
+    - Una llamada a otro sistema de producción
+3. Acción por defecto: La última regla de producción del sistema debe ser del tipo 1 -> A, para ejecutar una acción en caso de que ninguna de las reglas anteriores cumpla su condición de ejecución.
+
+## Arquitectura de subsunción
+
+La arquitectura de subsunciónconsiste en agrupar módulos de comportamiento. Cada módulo de comportamiento tiene una acción asociada, recibe la percepción directamente y comprueba una condición. Si esta se cumple, el módulo devuelve la acción a realizar. Un módulo se puede subsumir en otro. Si el módulo superior del esquema se cumple, se ejecuta este en lugar de los módulos inferiores. (Mirar fotos tema 2, página 22)
+
+## Agentes reactivos con memoria
+
+Limitaciones del sistema sensorial de un agente. Para mejorar la precisión teniendo en cuenta la historia sensorial previa se implementan sistemas con memoria. La representación de un estado en el instante t+1 es función de la entradas sensoriales en el instante t+1, la representación del estado en el instante anterior t y la acción seleccionada en el instante anterior t. (Mirar fotos tema 2, página 24).
+
+Adicionalmente el robot podría utilizar otras estructuras de datos: matriz que almacene el mapa con las casillas libres u ocupadas en el momento en el que se percibieron.
+
+## Sistemas basados en pizarras
+Son extensiones de los sistemas de producción. En el agente existen varios programas denominados Módulos de Conocimiento(MC), formados por una parte de condición y otra parte de acción. Existe una memoria común a todos los MC denominada pizarra.
+
+Cada MC es "experto" en una parte concreta del problema a resolver. Cuando se cumple su condición, un MC puede actualizar la pizarra, realizar una acción concreta o ambas. Es necesario implementar un programa de resolución de conflictos cuando dos MCs pueden actuar simultáneamente, decidiendo cuál actúa y cuál no o, en su caso, el orden de ejecución de ambos.
+
+La actualización de una parte de la pizarra correspondiente a un MC  puede desencadenar la ejecución de otros MCs. La pizarra, por tanto, alberga la solución que se está construyendo conforme al objetivo general del agente.
+
+## Búsquedas en espacios de estados
